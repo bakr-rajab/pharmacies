@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Order;
+use App\Medicine;
 use Illuminate\Http\Request;
 
 class OrderController extends Controller
@@ -14,7 +14,8 @@ class OrderController extends Controller
      */
     public function index()
     {
-        //
+        $medicines=Medicine::all();
+        return view('orders.index',compact('medicines'));
     }
 
     /**
@@ -33,29 +34,33 @@ class OrderController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function saveBill(Request $request)
     {
-        //
+        $med=Medicine::find($request->id);
+        $med->quantity=$med->quantity-1;
+        $med->save();
+        return response()->json($med);
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  \App\Order  $order
+     * @param  \App\Medicine  $medicine
      * @return \Illuminate\Http\Response
      */
-    public function show(Order $order)
+    public function show()
     {
-        //
+//        $medicines=Medicine::where('quantity','<',2)->get();
+//        return view('medicines.index',compact('medicines'));
     }
 
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Order  $order
+     * @param  \App\Medicine  $medicine
      * @return \Illuminate\Http\Response
      */
-    public function edit(Order $order)
+    public function edit(Medicine $medicine)
     {
         //
     }
@@ -64,22 +69,28 @@ class OrderController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Order  $order
+     * @param  \App\Medicine  $medicine
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Order $order)
-    {
-        //
-    }
+//    public function update(Request $request, $id)
+//    {
+//        $medicine=Medicine::find($id);
+//        $medicine->update($request->all());
+//        return response()->json($medicine);
+//    }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Order  $order
+     * @param  \App\Medicine  $medicine
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Order $order)
-    {
-        //
-    }
+//    public function destroy($id)
+//    {
+//        if (Medicine::destroy($id))
+//            return response()->json($id);
+//
+//        return response()->json(['failed Deleted']);
+//    }
+
 }

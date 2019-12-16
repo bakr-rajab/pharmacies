@@ -38,8 +38,11 @@ Route::group(['middleware' => ['auth','role:admin']], function() {
     Route::resource('stores','StoreController');
 });
 
-Route::group(['middleware' => ['auth','role:admin']], function() {
-    Route::resource('pharmacists','PharmacistController');
+
+Route::group(['middleware' => ['auth','role:pharmacist']], function() {
+    Route::get('/', 'OrderController@index');
+    Route::post('/orders/save-bill', 'OrderController@saveBill');
     Route::resource('medicines','MedicineController');
+    Route::resource('orders','OrderController');
     Route::resource('stores','StoreController');
 });
