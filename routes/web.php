@@ -11,9 +11,7 @@
 |
 */
 
-use App\User;
-use Spatie\Permission\Models\Permission;
-use Spatie\Permission\Models\Role;
+use SKAgarwal\GoogleApi\PlacesApi;
 
 // Route::get('/role', function () {
 //      $admin=User::find(1);
@@ -21,28 +19,31 @@ use Spatie\Permission\Models\Role;
 //      $userRole=Role::find(2);
 //      $adminRole=Role::find(1);
 
-//     //  $admin->assignRole($adminRole);
-//     //  $user->assignRole($userRole);
 
-//     return $adminRole->permissions()->sync(Permission::all());
-// });
+$api = 'AIzaSyC0tPLEFW6qNBFB9_7vEAs7IakWblvY020';
+Route::get('/google', function () {
+    $googlePlaces = new PlacesApi('AIzaSyC0tPLEFW6qNBFB9_7vEAs7IakWblvY020');
+//    dd($googlePlaces->placeAutocomplete('cairo'));
+    $ns = $googlePlaces->nearbySearch('30.033333, 31.233334',10);
+    return $ns;
+});
 
 Auth::routes();
 
 Route::get('/', 'HomeController@index')->name('home');
 
-Route::group(['middleware' => ['auth','role:admin']], function() {
+Route::group(['middleware' => ['auth', 'role:admin']], function () {
     Route::get('/', 'PharmacistController@index');
-    Route::resource('pharmacists','PharmacistController');
-    Route::resource('medicines','MedicineController');
-    Route::resource('stores','StoreController');
+    Route::resource('pharmacists', 'PharmacistController');
+    Route::resource('medicines', 'MedicineController');
+    Route::resource('stores', 'StoreController');
 });
 
 
-Route::group(['middleware' => ['auth','role:pharmacist']], function() {
+Route::group(['middleware' => ['auth', 'role:pharmacist']], function () {
     Route::get('/', 'OrderController@index');
     Route::post('/orders/save-bill', 'OrderController@saveBill');
-    Route::resource('medicines','MedicineController');
-    Route::resource('orders','OrderController');
-    Route::resource('stores','StoreController');
+    Route::resource('medicines', 'MedicineController');
+    Route::resource('orders', 'OrderController');
+    Route::resource('stores', 'StoreController');
 });
